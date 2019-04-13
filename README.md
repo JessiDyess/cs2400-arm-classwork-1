@@ -8,13 +8,34 @@ Follow the instructions for each of the following code samples in [Compliler Exp
 
 1. [printf](https://godbolt.org/z/y2YKew)
    1. What is the library function that is called?
+         The function is printf calle don line 4, it from the standard input and output library that is included at the beginning of th eprogram on line 1. 
    2. Research the implementation (source code) of this function.
+      Iwas able to find the GNU verison of the code that creates the function:
+      
+/* __printf (const char *format, ...)
+{
+   va_list arg;
+   int done;
+
+   va_start (arg, format);
+   done = vfprintf (stdout, format, arg);
+   va_end (arg);
+
+   return done;
+}*/
+
+As for how it works, basically it takes a formatting string and some variables as input then outputs strings to the console while converting the input variables to strings. The function accept a variable number of arguments it si declared as vararg. As the function reads through the line, it automatically prints the string to the console until it sees the '%' which is what indicates there is some data to be converted to a string. It then performs the neccessary conversions and prints the data to the console.
+
    3. Find out if the program directly executes the output operation or it makes a *system call* to the operating system.
-   
+        
+        A system call is performed by the printf fucntion after the conversion takes place. Printf must make a system call to write the data output to the console.
+         
 2. [malloc](https://godbolt.org/z/kAZX7x)
    1. How are the arguments passed to `malloc` and `free`?
+      They are passed as the size of memory to be allocated for the data in bytes to malloc. Free is how you deallocate memory, the argument is a pointer that points to the block of data to be deallocated.
    2. Research the implementation (source code) of `malloc` and `free`.
    
+      
 3. [malloc array](https://godbolt.org/z/bBl0zx)
    1. How does this case differ from the previous one?
    2. [**hard**] Write your own tiny `malloc` library by declaring a large `FILL` area and writing a `malloc` and a `free` subroutines that manage allocations to that memory area. 
