@@ -41,6 +41,9 @@ As for how it works, basically it takes a formatting string and some variables a
    
 3. [malloc array](https://godbolt.org/z/bBl0zx)
    1. How does this case differ from the previous one?
+   
+      The only difference I see is that instead of using malloc to allocate a memory chunk the size if one int, it is allocating enough memory to hold the array size of ints.
+      
    2. [**hard**] Write your own tiny `malloc` library by declaring a large `FILL` area and writing a `malloc` and a `free` subroutines that manage allocations to that memory area. 
       1. `malloc` works approximately as follows:
          - it takes as argument the number of bytes requested
