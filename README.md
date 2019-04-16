@@ -32,10 +32,13 @@ As for how it works, basically it takes a formatting string and some variables a
          
 2. [malloc](https://godbolt.org/z/kAZX7x)
    1. How are the arguments passed to `malloc` and `free`?
-      They are passed as the size of memory to be allocated for the data in bytes to malloc. Free is how you deallocate memory, the argument is a pointer that points to the block of data to be deallocated.
-   2. Research the implementation (source code) of `malloc` and `free`.
    
+      They are passed as the size of memory to be allocated for the data in bytes to malloc. Free is how you deallocate memory, the argument is a pointer that points to the block of data to be deallocated.
       
+   2. Research the implementation (source code) of `malloc` and `free`.
+      
+      Malloc takes an argument that represents the maount of data to be stored. It then finds the room for the data in the memory and makes it "off limits" for use by anything else until it is deallocated. Free takes an argument that points to the chucnk of data to be freed up, which then allows that memory to be used by other processes and data.
+   
 3. [malloc array](https://godbolt.org/z/bBl0zx)
    1. How does this case differ from the previous one?
    2. [**hard**] Write your own tiny `malloc` library by declaring a large `FILL` area and writing a `malloc` and a `free` subroutines that manage allocations to that memory area. 
