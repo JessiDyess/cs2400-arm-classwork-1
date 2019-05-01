@@ -83,6 +83,33 @@ As for how it works, basically it takes a formatting string and some variables a
       6. When `malloc` returns `NULL`:
          - when you have less memory than the next requested size
          - when the request is not a multiple of 4 _(due to the VisUAL limitation of addressing only words and correspondingly the `FILL` regions only take multiples of 4)_
+         
+         static unsigned char myMemory[1024 * 1024]; //reserve 1 MB for malloc
+static sizeT next_index = 0;
+
+void *malloc(sizeT sz)
+{
+    void *mem;
+
+    if(sizeof myMemory - next_index < sz)
+        return NULL;
+
+    mem = &myMemory[next_index];
+    next_index += sz;
+    return mem;
+}
+
+void free(void *mem)
+{
+    void *curr;
+   (((void*)myMemory<=mem)&&(mem<=(void*)(myMemory+20000))){
+   curr=mem;
+  --curr;
+  curr->free=1;
+ }
+ else 
+ printf("Please provide a valid pointer allocated by MyMalloc\n");
+}
    
 4. [arrays](https://godbolt.org/z/lcH006)
    1. Port this code to VisUAL.
