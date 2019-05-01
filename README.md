@@ -127,15 +127,79 @@ void free(void *mem)
         3. Start of execution (VisUAL starts executing the top line, so you might need to rearrange your code)
            - alternatively, you can define a `_start` label and load it into `pc`
    2. Observe/show that this code writes the local array in reverse order to the `static` global array.
-   
+         During the first loop, the array is populated with multiples of 128. It then switches to the second oop in which the numbers are put into the reverse order, as I stepped through the loops I could see each value being moved around in the array. 
 5. [2d array](https://godbolt.org/z/Kr-Sn8)
    1. Port this code to VisUAL.
    2. How are nested `for` loops handled in assembly? Are they *"nested"* in assembly?
    
+      To my understanding they are not "nested", they each have their own label. They do however make calls to each other during the loop runs so they are still able to accomplish the same goal as if they had been truly nested. Each time L5 is run it branches to L3, which makes then branches to L4. 
+   
 6. [2d array with mul](https://godbolt.org/z/cHwSTR)
    1. Port this code to VisUAL. (It's the same as the previous but with multiplicatoin).
    2. Add your 32-bit unsigned integer multiplication algorithm as a subroutine and run the code. Verify its correctness.
-
+      I could not get it to execute correctly at all
+      My Code:
+      main
+        sub     sp, sp, #8
+        movs    r3, #0
+        str     r3, [sp, #4]
+        b       L2
+L5
+        movs    r3, #0
+        str     r3, [sp]
+        b       L3
+L4
+        ldr     r3, [sp, #4]
+        ldr     r2, [sp]
+        mul     r3, r2, r3
+        b	mult
+        lsls    r1, r3, #1
+        ldr     r0, L7
+        ldr     r2, [sp, #4]
+        mov     r3, r2
+        lsls    r3, r3, #2
+        add     r3, r3, r2
+        ldr     r2, [sp]
+        add     r3, r3, r2
+        str     r1, [r0, r3, lsl #2]
+        ldr     r3, [sp]
+        adds    r3, r3, #1
+        str     r3, [sp]
+L3
+        ldr     r3, [sp]
+        cmp     r3, #4
+        ble     L4
+        ldr     r3, [sp, #4]
+        adds    r3, r3, #1
+        str     r3, [sp, #4]
+L2
+        ldr     r3, [sp, #4]
+        cmp     r3, #9
+        ble     L5
+        movs    r3, #0
+        mov     r0, r3
+        add     sp, sp, #8
+    
+ mult
+		mov		r4, #0
+		mov		r5, #1
+		mov		r6, #32
+		mov		r7, #0
+loop
+		and		r7, r3, r5
+		cmp		r7, #0
+		beq		mustAdd
+		
+then
+		mov		r2,r2, lsl #1
+		mov		r3,r3,asr #1
+		sub		r6, r6, #1
+		cmp		r6, #0
+		beq		exitLoop
+		b		loop
+exitLoop
+end 
+      
 ## Submission
 1. Fork this repository
 2. Clone and implement.
